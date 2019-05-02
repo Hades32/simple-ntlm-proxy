@@ -32,13 +32,17 @@ func handleConn(localConn io.ReadWriteCloser) {
 	}
 	remoteConn, err := dialer.Dial("tcp", *corpProxyAddr)
 	if err != nil {
-		log.Println("error dial:", err)
+		log.Fatalln("error dial:", err)
 		return
 	}
-	hopProxyUrl, _ := url.Parse(*hopProxyAddr)
+	hopProxyUrl, err := url.Parse(*hopProxyAddr)
+	if err != nil {
+		log.Fatalln("error parsing proxy addr:", err)
+		return
+	}
 	err = ntlm.ProxySetup(remoteConn, hopProxyUrl.Host)
 	if err != nil {
-		log.Println("error proxy injection:", err)
+		log.Fatalln("error proxy injection:", err)
 		return
 	}
 	if hopProxyUrl.Scheme == "https" {
@@ -56,9 +60,17 @@ func handleConn(localConn io.ReadWriteCloser) {
 		connectLine += "Proxy-Authorization: Basic " + base64credentials + "\n"
 	}
 	connectLine += "\n"
-	_, _ = remoteConn.Write([]byte(connectLine))
+	_, err = remoteConn.Write([]byte(connectLine))
+	if err != nil {
+		log.Fatalln("error writing connect:", err)
+		return
+	}
 	buffer := make([]byte, 256)
 	n, err := remoteConn.Read(buffer)
+	if err != nil {
+		log.Fatalln("error reading connect:", err)
+		return
+	}
 	if !bytes.HasPrefix(buffer, []byte("HTTP/1.1 200 OK")) {
 		log.Println("no HTTP OK", n, string(buffer), err)
 		return
@@ -106,7 +118,6 @@ func (x inout) Write(b []byte) (n int, err error) {
 }
 
 func main() {
-	log.Println("connecting to " + *destAddr)
 	handleConn(inout{
 		in:  os.Stdin,
 		out: os.Stdout,
