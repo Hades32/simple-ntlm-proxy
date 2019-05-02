@@ -1,0 +1,4 @@
+github.com/anynines/go-ntlm-auth v0.0.0-20170912103015-eff1ed18c75d h1:ZUe//cf27UXSnZOJgIiYlWQhuU2ICGS/zN7FXyILPR4=
+github.com/anynines/go-ntlm-auth v0.0.0-20170912103015-eff1ed18c75d/go.mod h1:FGaJ7otQvLuOVIs3Wn2bEgVuY2jNsM+6d7j35WGH3fo=
+github.com/anynines/go-proxy-setup-ntlm v0.0.0-20171026093854-638c5b468c2e h1:xGwIfuK9GzLpfsMbgAwC0CQmG0l1BQeT3uqbN0tZeOU=
+github.com/anynines/go-proxy-setup-ntlm v0.0.0-20171026093854-638c5b468c2e/go.mod h1:zhqMGTEBCWoeF2hgRJNvm/c8OOjscA6HTK/L2XsorvE=
