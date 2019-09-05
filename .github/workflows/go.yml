@@ -18,11 +18,15 @@ jobs:
 
     - name: Get dependencies
       run: |
+        export GOOS=windows
         go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
 
     - name: Build
-      run: go build -v .
+      run: |
+        export GOOS=windows
+        go build -v -o simple-ntlm-proxy.exe .
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: release
+        path: simple-ntlm-proxy.exe
